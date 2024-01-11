@@ -1,5 +1,5 @@
 # prisoner-dilemma-ai
-Agent-based learning for the classic Prisoner's Dilemma
+An investigation of agent-based learning for the classic game theory thought experiment, The Prisoner's Dilemma.
 
 ## What is the Prisoner's Dilemma?
 
