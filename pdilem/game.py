@@ -14,11 +14,11 @@ class Move(enum.Enum):
         """Return the score for this move against the other move"""
         if self == Move.COOPERATE:
             if other == Move.COOPERATE:
-                return 1
-            return 3
+                return -1
+            return -3
         if other == Move.COOPERATE:
             return 0
-        return 2
+        return -2
 
 
 class Actor(ABC):
