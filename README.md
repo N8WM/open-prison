@@ -1,4 +1,4 @@
-# prisoner-dilemma-ai
+# open-prison
 An investigation of agent-based learning for the classic game theory thought experiment, The Prisoner's Dilemma.
 
 ## What is the Prisoner's Dilemma?
