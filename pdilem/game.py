@@ -8,8 +8,8 @@ from typing import Tuple
 
 class Move(enum.Enum):
     """An actor's chosen move in a Prisoner's Dilemma game (cooperate or defect)"""
-    COOPERATE = 1
-    DEFECT = 2
+    COOPERATE = 0
+    DEFECT = 1
     def score(self, other: 'Move') -> int:
         """Return the score for this move against the other move"""
         if self == Move.COOPERATE:
