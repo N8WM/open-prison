@@ -1,38 +1,7 @@
 """Classes for Prisoner's Dilemma"""
 
-import enum
-from abc import ABC, abstractmethod
-
 from typing import Tuple
-
-
-class Move(enum.Enum):
-    """An actor's chosen move in a Prisoner's Dilemma game (cooperate or defect)"""
-    COOPERATE = 1
-    DEFECT = 2
-    def score(self, other: 'Move') -> int:
-        """Return the score for this move against the other move"""
-        if self == Move.COOPERATE:
-            if other == Move.COOPERATE:
-                return -1
-            return -3
-        if other == Move.COOPERATE:
-            return 0
-        return -2
-
-
-class Actor(ABC):
-    """An actor in a Prisoner's Dilemma game"""
-    @abstractmethod
-    def move(self) -> Move:
-        """Return the actor's next move"""
-    @abstractmethod
-    def result(self, other: Move, score: int):
-        """Tell the actor what happened in the last round"""
-    @abstractmethod
-    def reset(self) -> None:
-        """Reset the actor's state"""
-
+from .actor.abstracts import Move, Actor
 
 class Game:
     """A Prisoner's Dilemma game"""
