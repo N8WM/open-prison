@@ -76,6 +76,7 @@ def run_evolution(ngen=40, population=None, cxpb=0.5, mutpb=0.2):
         population[:] = offspring
 
     return population
+
 def main():
     evolved_population = run_evolution(ngen=40)
     further_evolved_population = run_evolution(ngen=40, population=evolved_population)
