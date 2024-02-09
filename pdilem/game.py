@@ -1,7 +1,7 @@
 """Classes for Prisoner's Dilemma"""
 
 from typing import Tuple
-from .actor.abstracts import Move, Actor
+from pdilem.actor import Move, Actor
 
 class Game:
     """A Prisoner's Dilemma game"""

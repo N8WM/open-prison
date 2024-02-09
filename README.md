@@ -15,3 +15,13 @@ This leads to four different possible outcomes for prisoners A and B:
 2. If A testifies against B but B remains silent, A will be set free while B serves three years in prison.
 3. If A remains silent but B testifies against A, A will serve three years in prison and B will be set free.
 4. If A and B testify against each other, they will each serve two years.
+
+## Prerequisites
+
+- Python 3.6 or newer
+- pip
+
+## Setup and Run Prisoner's Dilemma Evolutionary Algorithm
+
+- pip install -r requirements.txt
+- python3 deap_runner.py
