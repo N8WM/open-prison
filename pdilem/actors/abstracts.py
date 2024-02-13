@@ -20,18 +20,38 @@ class Move(Enum):
             return 0
         return -2
 
+    def meaning(self) -> str:
+        """Return the string description of a particular move"""
+        if self == Move.COOPERATE:
+            return "cooperate"
+        return "defect"
+
 
 class Actor(ABC):
     """An actor in a Prisoner's Dilemma game"""
+
+    name: str
+    verbose: bool
+
+    def __init__(self, name: str="Actor", verbose: bool = False):
+        """Initialize a new actor"""
+        self.name = name
+        self.verbose = verbose
+        self.total_score = 0
 
     @abstractmethod
     def move(self) -> Move:
         """Return the actor's next move"""
 
     @abstractmethod
-    def result(self, other: Move, score: int):
+    def result(self, other: Move, delta_score: int):
         """Tell the actor what happened in the last round"""
 
     @abstractmethod
     def reset(self) -> None:
         """Reset the actor's state"""
+
+    def print_label(self, label: str) -> None:
+        """Conditionally print a label for the actor"""
+        if self.verbose:
+            print(f"{label}: {self.name}")
