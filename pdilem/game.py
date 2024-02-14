@@ -49,22 +49,22 @@ class Game:
             self.print_divider(f"Round {i + 1}")
             self.next_round()
         self.print_divider("Game Over")
-        self.print_status("Scores", key="total_score")
+        self.print_status("Scores", key="total_score", unconditional=True)
         return self.actor1.total_score, self.actor2.total_score
 
     def print_status(
-        self, label: str, key: str | None = None, value: tuple[str, str] | None = None
+        self,
+        label: str,
+        key: str | None = None,
+        value: tuple[str, str] | None = None,
+        unconditional: bool = False,
     ) -> None:
         """Conditionally print the current total scores for each actor"""
-        if self.actor1.verbose or self.actor2.verbose:
+        if self.actor1.verbose or self.actor2.verbose or unconditional:
             print(f"\n{label}:")
-            value_ = (
-                value[0] if value else getattr(self.actor1, key) if key else None
-            )
+            value_ = value[0] if value else getattr(self.actor1, key) if key else None
             print(f"\t{self.actor1.name}: {value_}")
-            value_ = (
-                value[1] if value else getattr(self.actor2, key) if key else None
-            )
+            value_ = value[1] if value else getattr(self.actor2, key) if key else None
             print(f"\t{self.actor2.name}: {value_}")
             print()
 

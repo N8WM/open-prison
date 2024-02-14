@@ -1,25 +1,42 @@
 """Run the game"""
 
-from pdilem.actors import HumanActor, TFTActor
+import argparse
+
+from pdilem.actors import ACActor, ADActor, GTActor, GTFTActor, HumanActor, TFTActor
 from pdilem.actors.abstracts import Actor
 from pdilem.game import Game
 
+actors: list[type[Actor]] = [HumanActor, TFTActor, GTFTActor, ACActor, ADActor, GTActor]
+
+
+def get_args() -> tuple[type[Actor], type[Actor], int]:
+    """Get the arguments from the command line"""
+    parser = argparse.ArgumentParser(description="Run the game")
+    parser.add_argument(
+        "actor1", help="The first actor", type=str, choices=[a.name for a in actors]
+    )
+    parser.add_argument(
+        "actor2", help="The second actor", type=str, choices=[a.name for a in actors]
+    )
+    parser.add_argument(
+        "-r", "--rounds", help="The number of rounds", type=int, default=5
+    )
+
+    args = parser.parse_args()
+
+    actor_dict = {a.name: a for a in actors}
+    actor1 = actor_dict[args.actor1]
+    actor2 = actor_dict[args.actor2]
+    rounds = args.rounds
+
+    return actor1, actor2, rounds
+
+
 if __name__ == "__main__":
-    actors: list[type[Actor]] = [HumanActor, TFTActor]
-    actors_dict = {a.name: a for a in actors}
-    print(f"Available actors: {', '.join([a.name for a in actors])}")
-    actor1: type[Actor] | None = None
-    while actor1 is None or not issubclass(actor1, Actor):
-        actor1 = actors_dict.get(input("Actor1: "), None)
-        if actor1 is None:
-            print("Invalid actor. Please choose an actor from the ones listed above.")
-    actor2: type[Actor] | None = None
-    while actor2 is None or not issubclass(actor2, Actor):
-        actor2 = actors_dict.get(input("Actor2: "), None)
-        if actor2 is None:
-            print("Invalid actor. Please choose an actor from the ones listed above.")
-    game = Game(actor1(), actor2())
+    a1, a2, r = get_args()
+    game = Game(a1(), a2())
+
     try:
-        game.run(5)
+        game.run(r)
     except KeyboardInterrupt:
         print("\nGame interrupted")
