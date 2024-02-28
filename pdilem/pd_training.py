@@ -1,7 +1,7 @@
 import numpy as np
 from stable_baselines3 import DQN, PPO, A2C
 from stable_baselines3.common.env_util import make_vec_env
-from pdilem.code3 import PrisonersDilemmaEnv
+from pdilem.prisoners_dilemma_env import PrisonersDilemmaEnv
 from pdilem.actors.tft import TFTActor
 from pdilem.actors.grimtrigger import GTActor
 from pdilem.actors.always import ACActor, ADActor
@@ -11,10 +11,10 @@ from pdilem.actors.randomActor import RandomActor
 opponent_set_0 = [ADActor, TFTActor, TFTActor, RandomActor]
 opponent_set_1 = [TFTActor, TFTActor, TFTActor, ADActor, ACActor, RandomActor, RandomActor, GTActor]
 opponent_set_2 = [TFTActor]
-env = PrisonersDilemmaEnv(memory_length=10, max_steps=20, opponent_actors=opponent_set_1)
+env = PrisonersDilemmaEnv(max_steps=20, opponent_actors=opponent_set_1)
 
-tft_env = make_vec_env(PrisonersDilemmaEnv, n_envs=1, env_kwargs=dict(memory_length=10, max_steps=20, opponent_actors=[TFTActor]))
-random_env = make_vec_env(PrisonersDilemmaEnv, n_envs=1, env_kwargs=dict(memory_length=10, max_steps=20, opponent_actors=[RandomActor]))
+tft_env = make_vec_env(PrisonersDilemmaEnv, n_envs=1, env_kwargs=dict(max_steps=20, opponent_actors=[TFTActor]))
+random_env = make_vec_env(PrisonersDilemmaEnv, n_envs=1, env_kwargs=dict(max_steps=20, opponent_actors=[RandomActor]))
 
 # Train the agent
 model = A2C("MlpPolicy", env, verbose=1).learn(10000)
