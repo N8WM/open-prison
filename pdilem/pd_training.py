@@ -5,11 +5,11 @@ from pdilem.prisoners_dilemma_env import PrisonersDilemmaEnv
 from pdilem.actors.tft import TFTActor
 from pdilem.actors.grimtrigger import GTActor
 from pdilem.actors.always import ACActor, ADActor
-from pdilem.actors.randomActor import RandomActor
+from pdilem.actors.random import RandActor
 
 # Create the environment
-opponent_set_0 = [ADActor, TFTActor, TFTActor, RandomActor]
-opponent_set_1 = [TFTActor, TFTActor, TFTActor, ADActor, ACActor, RandomActor, RandomActor, GTActor]
+opponent_set_0 = [ADActor, TFTActor, TFTActor, RandActor]
+opponent_set_1 = [TFTActor, TFTActor, TFTActor, ADActor, ACActor, RandActor, RandActor, GTActor]
 opponent_set_2 = [TFTActor]
 env = PrisonersDilemmaEnv(max_steps=20, opponent_actors=opponent_set_1)
 

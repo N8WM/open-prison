@@ -2,9 +2,8 @@ import numpy as np
 import gymnasium as gym
 from gymnasium import spaces
 import random
-from pdilem.actors.abstracts import Actor, Move
+from pdilem.actors.abstracts import Move
 from pdilem.actors.tft import TFTActor
-from pdilem.actors.randomActor import RandomActor
 
 class PrisonersDilemmaEnv(gym.Env):
 

@@ -2,11 +2,20 @@
 
 import argparse
 
-from pdilem.actors import ACActor, ADActor, GTActor, GTFTActor, HumanActor, TFTActor
+from pdilem.actors import (ACActor, ADActor, GTActor, GTFTActor, HumanActor,
+                           RandActor, TFTActor)
 from pdilem.actors.abstracts import Actor
 from pdilem.game import Game
 
-actors: list[type[Actor]] = [HumanActor, TFTActor, GTFTActor, ACActor, ADActor, GTActor]
+actors: list[type[Actor]] = [
+    HumanActor,
+    TFTActor,
+    GTFTActor,
+    ACActor,
+    ADActor,
+    GTActor,
+    RandActor,
+]
 
 
 def get_args() -> tuple[type[Actor], type[Actor], int]:
