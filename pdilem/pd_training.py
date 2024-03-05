@@ -11,10 +11,13 @@ from pdilem.actors.random import RandActor
 opponent_set_0 = [ADActor, TFTActor, TFTActor, RandActor]
 opponent_set_1 = [TFTActor, TFTActor, TFTActor, ADActor, ACActor, RandActor, RandActor, GTActor]
 opponent_set_2 = [TFTActor]
-env = PrisonersDilemmaEnv(max_steps=20, opponent_actors=opponent_set_1)
 
-tft_env = make_vec_env(PrisonersDilemmaEnv, n_envs=1, env_kwargs=dict(max_steps=20, opponent_actors=[TFTActor]))
-random_env = make_vec_env(PrisonersDilemmaEnv, n_envs=1, env_kwargs=dict(max_steps=20, opponent_actors=[RandomActor]))
+MAX_STEPS = 20
+
+env = PrisonersDilemmaEnv(max_steps=MAX_STEPS, opponent_actors=opponent_set_1)
+
+tft_env = make_vec_env(PrisonersDilemmaEnv, n_envs=1, env_kwargs=dict(max_steps=MAX_STEPS, opponent_actors=[TFTActor]))
+random_env = make_vec_env(PrisonersDilemmaEnv, n_envs=1, env_kwargs=dict(max_steps=MAX_STEPS, opponent_actors=[RandomActor]))
 
 # Train the agent
 model = A2C("MlpPolicy", env, verbose=1).learn(10000)
@@ -27,19 +30,15 @@ model.save("ppo_prisoners_dilemma")
 # using the vecenv
 totalReward = 0
 obs = random_env.reset() # the env here is the opponent of the model
-n_steps = 20
+n_steps = 50
+n_runs = 0
 for step in range(n_steps):
     action, _ = model.predict(obs, deterministic=True)
-    print(f"Step {step + 1}")
-    print("Action: ", action)
+    #print(f"Step {step + 1}")
     obs, reward, done, info = random_env.step(action)
-    
-    # vec_env.render()
-    if done:
-        # Note that the VecEnv resets automatically
-        # when a done signal is encountered
-        print("Goal reached!", "reward=", totalReward)
-        break
-    else:
-        print("obs=", obs, "reward=", reward)
-        totalReward += reward
+
+    print(f"Step {step + 1}", "obs=", obs, "reward=", reward)
+    totalReward += reward
+    n_runs += 1
+
+print("Done!", "reward=", totalReward, " average score=", totalReward / n_runs)
