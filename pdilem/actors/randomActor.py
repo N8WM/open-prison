@@ -15,7 +15,7 @@ class RandomActor(Actor):
         self.last_opponent_move: Move = Move.COOPERATE
 
     def move(self):
-        return random.choice([Move.COOPERATE, Move.COOPERATE, Move.DEFECT])
+        return random.choice([Move.COOPERATE, Move.COOPERATE, Move.COOPERATE, Move.COOPERATE, Move.DEFECT, Move.DEFECT, Move.DEFECT])
 
     def result(self, other, delta_score):
         self.last_opponent_move = other
