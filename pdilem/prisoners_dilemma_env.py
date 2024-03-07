@@ -1,86 +1,80 @@
-import numpy as np
-import gymnasium as gym
-from gymnasium import spaces
+"""Define the environment for the Prisoner's Dilemma game"""
+
 import random
-from pdilem.actors.abstracts import Move
+
+import gymnasium as gym
+import numpy as np
+from gymnasium import spaces
+
+from pdilem.actors.abstracts import Actor, Move
 from pdilem.actors.tft import TFTActor
 
+
 class PrisonersDilemmaEnv(gym.Env):
+    """Environment for the Prisoner's Dilemma game"""
 
     metadata = {"render_modes": ["console"]}
 
+    def __init__(self, max_steps=10, opponent_actors: list[type[Actor]] | None = None):
+        """
+        Initialize the environment
 
-    def __init__(self, max_steps=10, opponent_actors=[TFTActor]):
+        Args:
+            - max_steps (int): Maximum number of steps in an episode
+            - opponent_actors (list): List of opponent actors to choose from
+            at the start of each episode (default: [TFTActor])
+        """
         self.action_space = spaces.Discrete(2)  # 0 for cooperate, 1 for defect
         self.observation_space = spaces.MultiDiscrete([2] * 2)
 
         self.steps_taken = 0
         self.max_steps = max_steps  # Define the maximum number of steps in an episode
 
-        self.opponent_actors = opponent_actors
-        chosenActor = random.choice(self.opponent_actors)
-        self.opponent_actor = chosenActor()
+        self.opponent_actors = opponent_actors or [TFTActor]
+        chosen_actor = random.choice(self.opponent_actors)
+        self.opponent_actor = chosen_actor()
         self.opponent_actor.reset()
 
-    def reset(self, seed=None, options=None):
+    def reset(self, *args, seed=None, options=None):
         """
+        Reset the environment to the initial state, choosing a new opponent
         Important: the observation must be a numpy array
         :return: (np.array)
         """
 
-        super().reset(seed=seed, options=options)
+        super().reset(*args, seed=seed, options=options)
 
         self.steps_taken = 0
 
-        chosenActor = random.choice(self.opponent_actors)
-        self.opponent_actor = chosenActor()
+        chosen_actor = random.choice(self.opponent_actors)
+        self.opponent_actor = chosen_actor()
         self.opponent_actor.reset()
 
         return np.array([0, 0]), {}  # empty info dict
 
-
-    def step(self, action):
-
+    def step(self, action: int):
+        """
+        Take a step in the environment
+        """
         self.steps_taken += 1
-
-        action_decoded = Move.COOPERATE
-        if (action == 0):
-            action_decoded = Move.COOPERATE
-        elif (action == 1):
-            action_decoded = Move.DEFECT
-        else:
-            raise "action not valid" + str(action)
+        action_decoded = Move.from_int(action)
         self.opponent_actor.result(action_decoded, 0)
 
         opponent_action = self.opponent_actor.move()
-        opponent_action_encoded = 0
-        if (opponent_action == Move.COOPERATE):
-            opponent_action_encoded = 0
-        elif (opponent_action == Move.DEFECT):
-            opponent_action_encoded = 1
-        else:
-            raise "opponent actor move not valid" + opponent_action
-        
+        opponent_action_encoded = opponent_action.to_int()
 
         # Define the rewards based on the actions
-        if action_decoded == Move.COOPERATE:  # Cooperate
-            if opponent_action == Move.COOPERATE:
-                reward = 2  # Both players cooperate, both get a moderate reward
-            else:
-                reward = 0
-        else:  # Defect
-            if opponent_action == Move.COOPERATE:
-                reward = 3  # One defects while the other cooperates, defector gets maximum payoff, cooperator gets minimum
-            else:
-                reward = 1  # Both defect, both get a lower payoff than mutual cooperation
+        reward = action_decoded.score(opponent_action)
 
-        done = self.steps_taken >= self.max_steps  # Episode ends after a certain number of steps
+        done = (
+            self.steps_taken >= self.max_steps
+        )  # Episode ends after a certain number of steps
         info = {}  # Additional information, not used in this example
 
         return np.array([action, opponent_action_encoded]), reward, done, done, info
 
     def render(self):
-        pass
+        """Unimplemented"""
 
 
 # # env = PrisonersDilemmaEnv(memory_length=10, max_steps=30)
@@ -120,4 +114,3 @@ class PrisonersDilemmaEnv(gym.Env):
 #     if done:
 #         print(total_points)
 #         break
-
