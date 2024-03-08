@@ -8,32 +8,53 @@ from pdilem.actors.always import ACActor, ADActor
 from pdilem.actors.random import RandActor
 from pdilem.actors.randomActor import RandomActor
 
-model = PPO.load("ppo_prisoners_dilemma")
-
 MAX_STEPS = 20
 
-# Create the environment
-opponent_set_0 = [ADActor, TFTActor, TFTActor, RandActor]
-opponent_set_1 = [TFTActor, TFTActor, TFTActor, ADActor, ACActor, RandActor, RandActor, GTActor]
-opponent_set_2 = [TFTActor]
+class OpponentEnv:
+    """Selection of opponents"""
+    TFTEnv = make_vec_env(
+        PrisonersDilemmaEnv,
+        n_envs=1,
+        env_kwargs={"max_steps": MAX_STEPS, "opponent_actors": [TFTActor]},
+    )
 
-tft_env = make_vec_env(PrisonersDilemmaEnv, n_envs=1, env_kwargs=dict(max_steps=MAX_STEPS, opponent_actors=[TFTActor]))
-random_env = make_vec_env(PrisonersDilemmaEnv, n_envs=1, env_kwargs=dict(max_steps=MAX_STEPS, opponent_actors=[RandActor]))
-random_env2 = make_vec_env(PrisonersDilemmaEnv, n_envs=1, env_kwargs=dict(max_steps=MAX_STEPS, opponent_actors=[RandomActor]))
+    RandEnv = make_vec_env(
+        PrisonersDilemmaEnv,
+        n_envs=1,
+        env_kwargs={"max_steps": MAX_STEPS, "opponent_actors": [RandActor]},
+    )
 
-# Test the trained agent
-# using the vecenv
-totalReward = 0
-obs = random_env2.reset() # the env here is the opponent of the model
-n_steps = 50
-n_runs = 0
-for step in range(n_steps):
-    action, _ = model.predict(obs, deterministic=True)
-    #print(f"Step {step + 1}")
-    obs, reward, done, info = random_env2.step(action)
+    RandDistEnv = make_vec_env(
+        PrisonersDilemmaEnv,
+        n_envs=1,
+        env_kwargs={"max_steps": MAX_STEPS, "opponent_actors": [RandomActor]},
+    )
 
-    print(f"Step {step + 1}", "obs=", obs, "reward=", reward)
-    totalReward += reward
-    n_runs += 1
 
-print("Done!", "reward=", totalReward, " average score=", totalReward / n_runs)
+def test(model: A2C, opponent) -> None:
+    """Test the trained agent"""
+    # Test the trained agent
+    # using the vecenv
+    total_reward = 0
+    obs = opponent.reset()  # the env here is the opponent of the model
+    n_steps = 50
+    n_runs = 0
+    for step in range(n_steps):
+        action, _ = model.predict(obs, deterministic=True)
+        # print(f"Step {step + 1}")
+        obs, reward, _, _ = opponent.step(action)
+
+        print(f"Step {step + 1}", "obs=", obs, "reward=", reward)
+        total_reward += reward
+        n_runs += 1
+
+    print("Done!", "reward=", total_reward, " average score=", total_reward / n_runs)
+
+
+def main():
+    """Main function"""
+    model = PPO.load("ppo_prisoners_dilemma")
+    test(model, OpponentEnv.RandEnv)
+
+if __name__ == "__main__":
+    main()
