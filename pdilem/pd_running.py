@@ -1,17 +1,19 @@
-import numpy as np
-from stable_baselines3 import DQN, PPO, A2C
+"""Run the trained model against different opponents"""
+
+from stable_baselines3 import PPO
 from stable_baselines3.common.env_util import make_vec_env
-from pdilem.prisoners_dilemma_env import PrisonersDilemmaEnv
-from pdilem.actors.tft import TFTActor
-from pdilem.actors.grimtrigger import GTActor
-from pdilem.actors.always import ACActor, ADActor
+
 from pdilem.actors.random import RandActor
 from pdilem.actors.randomActor import RandomActor
+from pdilem.actors.tft import TFTActor
+from pdilem.prisoners_dilemma_env import PrisonersDilemmaEnv
 
 MAX_STEPS = 20
 
+
 class OpponentEnv:
     """Selection of opponents"""
+
     TFTEnv = make_vec_env(
         PrisonersDilemmaEnv,
         n_envs=1,
@@ -31,7 +33,7 @@ class OpponentEnv:
     )
 
 
-def test(model: A2C, opponent) -> None:
+def test(model: PPO, opponent) -> None:
     """Test the trained agent"""
     # Test the trained agent
     # using the vecenv
@@ -56,5 +58,7 @@ def main():
     model = PPO.load("ppo_prisoners_dilemma")
     test(model, OpponentEnv.RandEnv)
 
+
 if __name__ == "__main__":
     main()
+

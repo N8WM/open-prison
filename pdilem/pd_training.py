@@ -1,12 +1,10 @@
 """Train an agent to play the prisoners dilemma game using stable-baselines3"""
 
 from stable_baselines3 import A2C
-from stable_baselines3.common.env_util import make_vec_env
 
 from pdilem.actors.always import ACActor, ADActor
 from pdilem.actors.grimtrigger import GTActor
 from pdilem.actors.random import RandActor
-from pdilem.actors.randomActor import RandomActor
 from pdilem.actors.tft import TFTActor
 from pdilem.prisoners_dilemma_env import PrisonersDilemmaEnv
 
@@ -28,10 +26,15 @@ MAX_STEPS = 20
 
 env = PrisonersDilemmaEnv(max_steps=MAX_STEPS, opponent_actors=opponent_set_1)
 
+
 def train(timesteps=100000) -> A2C:
     """Train the agent"""
     # Train the agent
-    model = A2C("MlpPolicy", env, verbose=1, ).learn(timesteps)
+    model = A2C(
+        "MlpPolicy",
+        env,
+        verbose=1,
+    ).learn(timesteps)
 
     # Save the trained model
     model.save("ppo_prisoners_dilemma")
@@ -42,6 +45,7 @@ def train(timesteps=100000) -> A2C:
 def main():
     """Main function"""
     train()
+
 
 if __name__ == "__main__":
     main()
