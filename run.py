@@ -145,7 +145,7 @@ def main():
         "-t",
         "--train",
         action="store_true",
-        help="train a new/existing model in test_models/ with the PPO algorithm",
+        help="train a new or existing model into test_models/ with the PPO algorithm",
     )
     group1e.add_argument(
         "-r",
