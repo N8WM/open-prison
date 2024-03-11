@@ -1,4 +1,5 @@
 # open-prison
+
 An investigation of agent-based learning for the classic game theory thought experiment, The Prisoner's Dilemma.
 
 ## What is the Prisoner's Dilemma?
@@ -18,10 +19,50 @@ This leads to four different possible outcomes for prisoners A and B:
 
 ## Prerequisites
 
-- Python 3.6 or newer
+- Python 3.10+
 - pip
 
-## Setup and Run Prisoner's Dilemma Evolutionary Algorithm
+## Setup
 
-- pip install -r requirements.txt
-- python3 deap_runner.py
+1. Clone the repository with `git clone https://github.com/N8WM/open-prison.git`
+2. (Recommended) Create a virtual environment with `python -m venv venv`
+3. Install the required packages with `pip install -r requirements.txt`
+
+## Usage
+
+All available operations can be performed using the `run.py` script with the appropriate arguments. The script can be run with `python run.py [args]`:
+
+```text
+usage: run.py
+       [-h]
+       (-t | -r ACTOR1 ACTOR2)
+       [-i ITERATIONS]
+       [-m MODEL_NAME]
+       [-s SAVE_AS]
+       [-T TOTAL_TIMESTEPS]
+       [-o OPPONENT1 [OPPONENT2 ...]]
+
+Train a DRL model or run an iterated prisoner's dilemma game with two actors
+
+options:
+  -h, --help            show this help message and exit
+
+Functional arguments (mutually exclusive):
+  -t, --train           train a new/existing model in test_models/ with the PPO algorithm
+  -r ACTOR1 ACTOR2, --run ACTOR1 ACTOR2
+                        run a game with the two specified participating actors
+
+Interchangeable running/training arguments:
+  -i ITERATIONS, --iterations ITERATIONS
+                        number of iterations in a game/episode (default: 100)
+
+Training arguments:
+  -m MODEL_NAME, --model-name MODEL_NAME
+                        optional name of model to continue training, overwritten if -s is not used
+  -s SAVE_AS, --save-as SAVE_AS
+                        name to save the model as, (minus the .zip extension)
+  -T TOTAL_TIMESTEPS, --total-timesteps TOTAL_TIMESTEPS
+                        total number of timesteps to train the model for (default: 1,000,000)
+  -o OPPONENT1 [OPPONENT2 ...], --opponents OPPONENT1 [OPPONENT2 ...]
+                        opponents to train against (default: TFT, GTFT, AD, AC, GT)
+```
