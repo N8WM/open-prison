@@ -163,3 +163,5 @@ cython_debug/
 
 ppo_prisoners_dilemma.zip
 ppo_cartpole.zip
+
+test_models/

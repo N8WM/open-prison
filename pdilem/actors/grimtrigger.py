@@ -7,11 +7,15 @@ class GTActor(Actor):
     """Grim trigger implementation"""
 
     name = "GT"
+    verbose = False
+    cloneable = True
 
-    def __init__(self, name=None, verbose=False):
+    def __init__(self, name: str | None = None, verbose: bool | None = None):
         if name is not None:
             self.name = name
-        super().__init__(self.name, verbose)
+        if verbose is not None:
+            self.verbose = verbose
+        super().__init__()
         self.triggered = False
 
     def move(self):
@@ -20,5 +24,10 @@ class GTActor(Actor):
     def result(self, other, delta_score):
         self.triggered = self.triggered or other == Move.DEFECT
 
-    def reset(self) -> None:
+    def reset(self):
         self.triggered = False
+
+    def clone(self):
+        cloned = super().clone()
+        cloned.triggered = self.triggered
+        return cloned

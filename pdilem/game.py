@@ -1,7 +1,5 @@
 """Classes for Prisoner's Dilemma"""
 
-from typing import Tuple
-
 from pdilem.actors.abstracts import Actor, Move
 
 
@@ -23,7 +21,7 @@ class Game:
         self.actor1.total_score = 0
         self.actor2.total_score = 0
 
-    def next_round(self) -> Tuple[Move, Move, int, int]:
+    def next_round(self) -> tuple[Move, Move, int, int]:
         """Play a round of the game, returns moves and scores"""
         self.print_status("Scores", key="total_score")
         self.actor1.print_label("INPUT")

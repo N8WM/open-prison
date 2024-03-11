@@ -7,11 +7,15 @@ class HumanActor(Actor):
     """Human actor implementation"""
 
     name = "Human"
+    verbose = True
+    cloneable = False
 
-    def __init__(self, name=None, verbose=True):
+    def __init__(self, name: str | None = None, verbose: bool | None = None):
         if name is not None:
             self.name = name
-        super().__init__(self.name, verbose)
+        if verbose is not None:
+            self.verbose = verbose
+        super().__init__()
 
     def move(self):
         response = input("\tCooperate or Defect? (c/d): ").strip().lower()
@@ -24,5 +28,5 @@ class HumanActor(Actor):
     def result(self, other, delta_score):
         pass
 
-    def reset(self) -> None:
+    def reset(self):
         pass

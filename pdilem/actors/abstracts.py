@@ -3,9 +3,17 @@
 from abc import ABC, abstractmethod
 from enum import IntEnum
 
+from typing import TypeVar
+
+T = TypeVar("T", bound="Actor")
+
 
 class InvalidActionError(Exception):
     """Raised when an invalid action is taken"""
+
+
+class InvalidCloneError(Exception):
+    """Raised when an invalid clone is attempted"""
 
 
 class Move(IntEnum):
@@ -49,11 +57,10 @@ class Actor(ABC):
 
     name: str
     verbose: bool
+    cloneable: bool
 
-    def __init__(self, name: str = "Actor", verbose: bool = False):
+    def __init__(self, *args, **kwargs):
         """Initialize a new actor"""
-        self.name = name
-        self.verbose = verbose
         self.total_score = 0
 
     @abstractmethod
@@ -67,6 +74,16 @@ class Actor(ABC):
     @abstractmethod
     def reset(self) -> None:
         """Reset the actor's state"""
+
+    def clone(self: T) -> T:
+        """Return an instance of the actor with the same state (non-verbose)"""
+        if not self.cloneable:
+            raise InvalidCloneError(
+                f"Attempted to clone a non-cloneable actor: {self.name}"
+            )
+        cloned = self.__class__(verbose=False)
+        cloned.total_score = self.total_score
+        return cloned
 
     def print_label(self, label: str) -> None:
         """Conditionally print a label for the actor"""
