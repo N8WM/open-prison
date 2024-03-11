@@ -30,7 +30,7 @@ This leads to four different possible outcomes for prisoners A and B:
 
 ## Usage
 
-All available operations can be performed using the `run.py` script with the appropriate arguments. The script can be run with `python run.py [args]`:
+All available operations can be performed using the `run.py` script with the appropriate arguments: `python run.py [args]`
 
 ```text
 usage: run.py
@@ -48,7 +48,7 @@ options:
   -h, --help            show this help message and exit
 
 Functional arguments (mutually exclusive):
-  -t, --train           train a new/existing model in test_models/ with the PPO algorithm
+  -t, --train           train a new or existing model into test_models/ with the PPO algorithm
   -r ACTOR1 ACTOR2, --run ACTOR1 ACTOR2
                         run a game with the two specified participating actors
 
