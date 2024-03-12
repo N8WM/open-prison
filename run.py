@@ -122,8 +122,8 @@ def train(
 
 def run(actor1_name: str, actor2_name: str, iterations: int):
     """Run a game with two actors"""
-    actor1 = logic_pool[actor1_name]()
-    actor2 = logic_pool[actor2_name]()
+    actor1 = combined_pool[actor1_name]()
+    actor2 = combined_pool[actor2_name]()
 
     game = Game(actor1, actor2)
 
